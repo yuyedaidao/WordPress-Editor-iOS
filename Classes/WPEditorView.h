@@ -212,7 +212,6 @@ stylesForCurrentSelection:(NSArray*)styles;
 @property (nonatomic, strong, readonly) WPEditorField* contentField;
 @property (nonatomic, weak, readonly) WPEditorField* focusedField;
 @property (nonatomic, strong, readonly) WPEditorField* titleField;
-@property (nonatomic, strong, readonly) UITextField *sourceViewTitleField;
 @property (nonatomic, strong, readonly) UIView *sourceContentDividerView;
 
 #pragma mark - Properties: Subviews
@@ -460,9 +459,6 @@ stylesForCurrentSelection:(NSArray*)styles;
 - (void)endEditing;
 
 #pragma mark - Editor mode
-
-- (BOOL)isInVisualMode;
-- (void)showHTMLSource;
 - (void)showVisualEditor;
 
 #pragma mark - Editing lock

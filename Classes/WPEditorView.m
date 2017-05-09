@@ -51,7 +51,6 @@ static NSString* const WPEditorViewWebViewContentSizeKey = @"contentSize";
 @property (nonatomic, strong, readwrite) NSString *selectedImageAlt;
 
 #pragma mark - Subviews
-@property (nonatomic, strong, readwrite) UITextField *sourceViewTitleField;
 @property (nonatomic, strong, readwrite) ZSSTextView *sourceView;
 @property (nonatomic, strong, readonly) UIWebView* webView;
 
@@ -83,12 +82,10 @@ static NSString* const WPEditorViewWebViewContentSizeKey = @"contentSize";
 		CGRect childFrame = frame;
 		childFrame.origin = CGPointZero;
 		
-        [self createSourceTitleViewWithFrame: childFrame];
-        [self createSourceDividerViewWithFrame:CGRectMake(0.0f, CGRectGetMaxY(self.sourceViewTitleField.frame), CGRectGetWidth(childFrame), 1.0f)];
         CGRect sourceViewFrame = CGRectMake(0.0f,
-                                            CGRectGetMaxY(self.sourceContentDividerView.frame),
+                                            0,
                                             CGRectGetWidth(childFrame),
-                                            CGRectGetHeight(childFrame)-CGRectGetHeight(self.sourceViewTitleField.frame)-CGRectGetHeight(self.sourceContentDividerView.frame));
+                                            44);
         
         [self createSourceViewWithFrame:sourceViewFrame];
 		[self createWebViewWithFrame:childFrame];
@@ -109,25 +106,6 @@ static NSString* const WPEditorViewWebViewContentSizeKey = @"contentSize";
 }
 
 #pragma mark - Init helpers
-
-- (void)createSourceTitleViewWithFrame:(CGRect)frame
-{
-    NSAssert(!_sourceViewTitleField, @"The source view title field must not exist when this method is called!");	
-
-    CGRect titleFrame;
-    CGFloat textWidth = CGRectGetWidth(frame) - (2 * UITextFieldLeftRightInset);
-    titleFrame = CGRectMake(UITextFieldLeftRightInset, SourceTitleTextFieldYOffset, textWidth, UITextFieldFieldHeight);
-    _sourceViewTitleField = [[UITextField alloc] initWithFrame:titleFrame];
-    _sourceViewTitleField.hidden = YES;
-    _sourceViewTitleField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-    _sourceViewTitleField.autocorrectionType = UITextAutocorrectionTypeDefault;
-    _sourceViewTitleField.autoresizingMask =  UIViewAutoresizingFlexibleWidth;
-    _sourceViewTitleField.delegate = self;
-    _sourceViewTitleField.accessibilityLabel = NSLocalizedString(@"Title", @"Post title");
-    _sourceViewTitleField.returnKeyType = UIReturnKeyNext;
-    [self addSubview:_sourceViewTitleField];
-	[self startObservingTitleFieldChanges];
-}
 
 - (void)createSourceDividerViewWithFrame:(CGRect)frame
 {
@@ -1350,27 +1328,13 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 
 - (NSString*)contents
 {
-    NSString* contents = nil;
-    
-    if ([self isInVisualMode]) {
-        contents = [self.contentField html];
-    } else {
-        contents =  self.sourceView.text;
-    }
-    
+    NSString* contents  = [self.contentField html];
     return contents;
 }
 
 - (NSString*)title
 {
-    NSString* title = nil;
-    
-    if ([self isInVisualMode]) {
-        title = [self.titleField strippedHtml];
-    } else {
-        title =  self.sourceViewTitleField.text;
-    }
-    
+    NSString* title = [self.titleField strippedHtml];
     return title;
 }
 
@@ -1420,35 +1384,22 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 
 - (void)restoreSelection
 {
-    if (self.isInVisualMode) {
-        [self.webView stringByEvaluatingJavaScriptFromString:@"ZSSEditor.restoreRange();"];
-    } else {
-        [self.sourceView select:self];
-        [self.sourceView setSelectedRange:self.selectionBackup];
-        self.selectionBackup = NSMakeRange(0, 0);
-    }
+ 
+    [self.webView stringByEvaluatingJavaScriptFromString:@"ZSSEditor.restoreRange();"];
+    
     
 }
 
 - (void)saveSelection
 {
-    if (self.isInVisualMode) {
-        [self.webView stringByEvaluatingJavaScriptFromString:@"ZSSEditor.backupRange();"];
-    } else {
-        self.selectionBackup = self.sourceView.selectedRange;
-    }
+    
+    [self.webView stringByEvaluatingJavaScriptFromString:@"ZSSEditor.backupRange();"];
+    
 }
 
 - (NSString*)selectedText
 {
-    NSString* selectedText;
-    if (self.isInVisualMode) {
-        selectedText = [self.webView stringByEvaluatingJavaScriptFromString:@"ZSSEditor.getSelectedText();"];
-    } else {
-        NSRange range = [self.sourceView selectedRange];
-        selectedText = [self.sourceView.text substringWithRange:range];
-    }
-    
+    NSString* selectedText = [self.webView stringByEvaluatingJavaScriptFromString:@"ZSSEditor.getSelectedText();"];
 	return selectedText;
 }
 
@@ -1629,18 +1580,9 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 {
 	NSParameterAssert([url isKindOfClass:[NSString class]]);
 	NSParameterAssert([title isKindOfClass:[NSString class]]);
-	
     url = [self normalizeURL:url];
-    
-    if (self.isInVisualMode) {
-        NSString *trigger = [NSString stringWithFormat:@"ZSSEditor.insertLink(\"%@\",\"%@\");", url, title];
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    } else {
-        NSString *aTagText = [NSString stringWithFormat:@"<a href=\"%@\">%@</a>", url, title];
-        [self.sourceView insertText:aTagText];
-        [self.sourceView becomeFirstResponder];
-    }
-		
+    NSString *trigger = [NSString stringWithFormat:@"ZSSEditor.insertLink(\"%@\",\"%@\");", url, title];
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
     [self callDelegateEditorTextDidChange];
 }
 
@@ -1652,16 +1594,12 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 - (void)updateLink:(NSString *)url
 			 title:(NSString*)title
 {
-	NSAssert(self.isInVisualMode, @"Editor must be in visual mode when calling this method.");
     NSParameterAssert([url isKindOfClass:[NSString class]]);
 	NSParameterAssert([title isKindOfClass:[NSString class]]);
     
     url = [self normalizeURL:url];
-    
-    if (self.isInVisualMode) {
-        NSString *trigger = [NSString stringWithFormat:@"ZSSEditor.updateLink(\"%@\",\"%@\");", url, title];
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    }
+    NSString *trigger = [NSString stringWithFormat:@"ZSSEditor.updateLink(\"%@\",\"%@\");", url, title];
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
     
     [self callDelegateEditorTextDidChange];
 }
@@ -1717,42 +1655,12 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 
 #pragma mark - Editor mode
 
-- (BOOL)isInVisualMode
-{
-	return !self.webView.hidden;
-}
-
-- (void)showHTMLSource
-{
-    BOOL titleHadFocus = self.focusedField == self.titleField;
-    
-	self.sourceView.text = [self.contentField html];
-	self.sourceView.hidden = NO;
-    self.sourceViewTitleField.text = [self.titleField strippedHtml];
-    self.sourceViewTitleField.hidden = NO;
-    self.sourceContentDividerView.hidden = NO;
-	self.webView.hidden = YES;
-    
-    if (titleHadFocus) {
-        [self.sourceViewTitleField becomeFirstResponder];
-    } else {
-        [self.sourceView becomeFirstResponder];
-    }
-    
-    UITextPosition* position = [self.sourceView positionFromPosition:[self.sourceView beginningOfDocument]
-                                                              offset:0];
-    
-    [self.sourceView setSelectedTextRange:[self.sourceView textRangeFromPosition:position toPosition:position]];
-}
-
 - (void)showVisualEditor
 {
-    BOOL titleHadFocus = self.sourceViewTitleField.isFirstResponder;
+    BOOL titleHadFocus = YES;
     
 	[self.contentField setHtml:self.sourceView.text];
 	self.sourceView.hidden = YES;
-    [self.titleField setHtml:self.sourceViewTitleField.text];
-    self.sourceViewTitleField.hidden = YES;
     self.sourceContentDividerView.hidden = YES;
 	self.webView.hidden = NO;
     
@@ -1773,7 +1681,7 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
     
     [self.titleField disableEditing];
     [self.contentField disableEditing];
-    [self.sourceViewTitleField setEnabled:NO];
+
     [self.sourceView setEditable:NO];
 }
 
@@ -1781,7 +1689,6 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 {
     [self.titleField enableEditing];
     [self.contentField enableEditing];
-    [self.sourceViewTitleField setEnabled:YES];
     [self.sourceView setEditable:YES];
 }
 
@@ -1821,37 +1728,26 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 
 - (void)setBold
 {
-    if (self.isInVisualMode) {
-        NSString *trigger = @"ZSSEditor.setBold();";
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    } else {
-        [self wrapSourceViewSelectionWithTag:@"b"];
-    }
+  
+    NSString *trigger = @"ZSSEditor.setBold();";
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
     
     [self callDelegateEditorTextDidChange];
 }
 
 - (void)setBlockQuote
 {
-    if (self.isInVisualMode) {
-        NSString *trigger = @"ZSSEditor.setBlockquote();";
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    } else {
-        [self wrapSourceViewSelectionWithTag:@"blockquote"];
-    }
     
+    NSString *trigger = @"ZSSEditor.setBlockquote();";
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
     [self callDelegateEditorTextDidChange];
 }
 
 - (void)setItalic
 {
-    if (self.isInVisualMode) {
-        NSString *trigger = @"ZSSEditor.setItalic();";
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    } else {
-        [self wrapSourceViewSelectionWithTag:@"i"];
-    }
     
+    NSString *trigger = @"ZSSEditor.setItalic();";
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
     [self callDelegateEditorTextDidChange];
 }
 
@@ -1865,13 +1761,10 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 
 - (void)setUnderline
 {
-    if (self.isInVisualMode) {
-        NSString *trigger = @"ZSSEditor.setUnderline();";
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    } else {
-        [self wrapSourceViewSelectionWithTag:@"u"];
-    }
     
+    NSString *trigger = @"ZSSEditor.setUnderline();";
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
+
     [self callDelegateEditorTextDidChange];
 }
 
@@ -1879,43 +1772,31 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 {
     NSString *trigger = @"ZSSEditor.setSuperscript();";
 	[self.webView stringByEvaluatingJavaScriptFromString:trigger];
-
     [self callDelegateEditorTextDidChange];
 }
 
 - (void)setStrikethrough
 {
-    if (self.isInVisualMode) {
-        NSString *trigger = @"ZSSEditor.setStrikeThrough();";
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    } else {
-        [self wrapSourceViewSelectionWithTag:@"del"];
-    }
-
+    
+    NSString *trigger = @"ZSSEditor.setStrikeThrough();";
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
+    
     [self callDelegateEditorTextDidChange];
 }
 
 - (void)setUnorderedList
 {
-    if (self.isInVisualMode) {
-        NSString *trigger = @"ZSSEditor.setUnorderedList();";
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    } else {
-        [self wrapSourceViewSelectionWithTag:@"ul"];
-    }
-
+  
+    NSString *trigger = @"ZSSEditor.setUnorderedList();";
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
+    
     [self callDelegateEditorTextDidChange];
 }
 
 - (void)setOrderedList
 {
-    if (self.isInVisualMode) {
-        NSString *trigger = @"ZSSEditor.setOrderedList();";
-        [self.webView stringByEvaluatingJavaScriptFromString:trigger];
-    } else {
-        [self wrapSourceViewSelectionWithTag:@"ol"];
-    }
-
+    NSString *trigger = @"ZSSEditor.setOrderedList();";
+    [self.webView stringByEvaluatingJavaScriptFromString:trigger];
     [self callDelegateEditorTextDidChange];
 }
 
@@ -1923,7 +1804,6 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 {
     NSString *trigger = @"ZSSEditor.setHorizontalRule();";
 	[self.webView stringByEvaluatingJavaScriptFromString:trigger];
-
     [self callDelegateEditorTextDidChange];
 }
 

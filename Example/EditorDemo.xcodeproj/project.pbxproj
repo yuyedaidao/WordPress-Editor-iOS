@@ -78,7 +78,7 @@
 		F1364905ABF9E63116BBBD87 /* Pods-EditorDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EditorDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-EditorDemo/Pods-EditorDemo.release.xcconfig"; sourceTree = "<group>"; };
 		FFBC2B331CB85A5B00B0379E /* WPTestLegacyEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPTestLegacyEditorViewController.h; sourceTree = "<group>"; };
 		FFBC2B341CB85A5B00B0379E /* WPTestLegacyEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPTestLegacyEditorViewController.m; sourceTree = "<group>"; };
-		FFE317141C9C4D5C00430319 /* WordPress-iOS-Editor.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "WordPress-iOS-Editor.podspec"; path = "../WordPress-iOS-Editor.podspec"; sourceTree = "<group>"; };
+		FFE317141C9C4D5C00430319 /* iOSEditor.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = iOSEditor.podspec; path = ../iOSEditor.podspec; sourceTree = "<group>"; };
 		FFE317151C9C4D5C00430319 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		FFE317161C9C4D5C00430319 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -211,7 +211,7 @@
 		FFE317131C9C4D4B00430319 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				FFE317141C9C4D5C00430319 /* WordPress-iOS-Editor.podspec */,
+				FFE317141C9C4D5C00430319 /* iOSEditor.podspec */,
 				FFE317151C9C4D5C00430319 /* README.md */,
 				FFE317161C9C4D5C00430319 /* LICENSE */,
 			);
