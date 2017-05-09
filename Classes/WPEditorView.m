@@ -24,8 +24,6 @@ static NSString* const kWPEditorViewFieldTitleId = @"zss_field_title";
 static NSString* const kWPEditorViewFieldContentId = @"zss_field_content";
 
 static const CGFloat UITextFieldLeftRightInset = 20.0;
-static const CGFloat UITextFieldFieldHeight = 55.0;
-static const CGFloat SourceTitleTextFieldYOffset = 4.0;
 static const CGFloat HTMLViewTopInset = 15.0;
 static const CGFloat HTMLViewLeftRightInset = 15.0;
 
@@ -658,7 +656,7 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 /**
  *	@brief		Handles a video entered fullscreen callback
  *
- *	@param		url		The url with all the callback information.
+ *	@param		aURL		The url with all the callback information.
  */
 - (void)handleVideoFullScreenStartedCallback:(NSURL *)aURL
 {
@@ -695,7 +693,7 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
 /**
  *	@brief		Handles a video ended fullscreen callback.
  *
- *	@param		url		The url with all the callback information.
+ *	@param		aURL		The url with all the callback information.
  */
 - (void)handleVideoFullScreenEndedCallback:(NSURL *)aURL
 {
