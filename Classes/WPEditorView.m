@@ -50,7 +50,6 @@ static NSString* const WPEditorViewWebViewContentSizeKey = @"contentSize";
 
 #pragma mark - Subviews
 @property (nonatomic, strong, readwrite) ZSSTextView *sourceView;
-@property (nonatomic, strong, readonly) UIWebView* webView;
 
 #pragma mark - Editor loading support
 @property (nonatomic, copy, readwrite) NSString* preloadedHTML;
@@ -77,16 +76,7 @@ static NSString* const WPEditorViewWebViewContentSizeKey = @"contentSize";
 	self = [super initWithFrame:frame];
 	
 	if (self) {
-		CGRect childFrame = frame;
-		childFrame.origin = CGPointZero;
-		
-        CGRect sourceViewFrame = CGRectMake(0.0f,
-                                            0,
-                                            CGRectGetWidth(childFrame),
-                                            44);
-        
-        [self createSourceViewWithFrame:sourceViewFrame];
-		[self createWebViewWithFrame:childFrame];
+		[self createWebViewWithFrame:frame];
 		[self setupHTMLEditor];
 	}
 	

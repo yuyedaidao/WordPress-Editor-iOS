@@ -216,6 +216,7 @@ stylesForCurrentSelection:(NSArray*)styles;
 
 #pragma mark - Properties: Subviews
 @property (nonatomic, strong, readonly) ZSSTextView *sourceView;
+@property (nonatomic, strong, readonly) UIWebView* webView;
 
 #pragma mark - URL normalization
 
