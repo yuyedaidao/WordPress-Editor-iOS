@@ -218,6 +218,8 @@ stylesForCurrentSelection:(NSArray*)styles;
 @property (nonatomic, strong, readonly) ZSSTextView *sourceView;
 @property (nonatomic, strong, readonly) UIWebView* webView;
 
+@property (assign, nonatomic) CGFloat keyboardTopSpace;
+
 #pragma mark - URL normalization
 
 - (NSString*)normalizeURL:(NSString*)url;
