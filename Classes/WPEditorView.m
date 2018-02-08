@@ -316,7 +316,7 @@ static NSString* const WPEditorViewWebViewContentSizeKey = @"contentSize";
         
         CGFloat vOffset = CGRectGetHeight(self.frame) - keyboardOrigin.y;
         
-        UIEdgeInsets insets = UIEdgeInsetsMake(0.0f, 0.0f, vOffset, 0.0f);
+         UIEdgeInsets insets = UIEdgeInsetsMake(0.0f, 0.0f, vOffset + self.keyboardTopSpace, 0.0f);
         
         self.webView.scrollView.contentInset = insets;
         self.webView.scrollView.scrollIndicatorInsets = insets;
