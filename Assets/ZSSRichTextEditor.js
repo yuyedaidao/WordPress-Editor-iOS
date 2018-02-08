@@ -1983,7 +1983,7 @@ ZSSEditor.removeVisualFormatting = function(html) {
     str = ZSSEditor.removeImageSelectionFormattingFromHTML(str);
     str = ZSSEditor.removeCaptionFormatting(str);
     str = ZSSEditor.replaceVideoPressVideosForShortcode(str);
-    str = ZSSEditor.replaceVideosForShortcode(str);
+    //str = ZSSEditor.replaceVideosForShortcode(str);//这是我私自注释掉的
     return str;
 }
 
