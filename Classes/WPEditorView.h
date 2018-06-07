@@ -124,7 +124,7 @@
  * @brief		Received when the user taps on a video in the editor.
  *
  * @param		editorView	The editor view.
- * @param		videoId		The id of image of the image that was tapped.
+ * @param		videoID		The id of image of the image that was tapped.
  * @param		url			The url of the image that was tapped.
  *
  */
@@ -156,7 +156,7 @@ stylesForCurrentSelection:(NSArray*)styles;
  * @brief		Received when a video local url is replaced by the final remote url.
  *
  * @param		editorView	The editor view.
- * @param		videoId		The unique id of the video that had the local url replaced by remote url.
+ * @param		videoID		The unique id of the video that had the local url replaced by remote url.
  *
  */
 - (void)editorView:(WPEditorView*)editorView
@@ -166,7 +166,7 @@ stylesForCurrentSelection:(NSArray*)styles;
  * @brief		Received when an image is pasted into the editor.
  *
  * @param       editorView  The editor view.
- * @param       imageId     The id of image of the image that was pasted.
+ * @param       image     The id of image of the image that was pasted.
  *
  */
 - (void)editorView:(WPEditorView*)editorView
@@ -212,11 +212,11 @@ stylesForCurrentSelection:(NSArray*)styles;
 @property (nonatomic, strong, readonly) WPEditorField* contentField;
 @property (nonatomic, weak, readonly) WPEditorField* focusedField;
 @property (nonatomic, strong, readonly) WPEditorField* titleField;
-@property (nonatomic, strong, readonly) UITextField *sourceViewTitleField;
 @property (nonatomic, strong, readonly) UIView *sourceContentDividerView;
 
 #pragma mark - Properties: Subviews
 @property (nonatomic, strong, readonly) ZSSTextView *sourceView;
+@property (nonatomic, strong, readonly) UIWebView* webView;
 
 #pragma mark - URL normalization
 
@@ -460,9 +460,6 @@ stylesForCurrentSelection:(NSArray*)styles;
 - (void)endEditing;
 
 #pragma mark - Editor mode
-
-- (BOOL)isInVisualMode;
-- (void)showHTMLSource;
 - (void)showVisualEditor;
 
 #pragma mark - Editing lock

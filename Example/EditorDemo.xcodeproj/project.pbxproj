@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		205CB5D539904AE0BBF05210 /* Pods_EditorDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87F3C9B730B667AD34F62409 /* Pods_EditorDemo.framework */; };
+		21FE0BD11EC2BF7A001DE002 /* WordPress-iOS-Editor.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 21FE0BD01EC2BF7A001DE002 /* WordPress-iOS-Editor.podspec */; };
 		59F15AD219E45BB000CD8E33 /* WPEditorDemoLoggingConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F15AD119E45BB000CD8E33 /* WPEditorDemoLoggingConfiguration.m */; };
 		5D24FEF91A3C9E8B009E1932 /* WPImageMetaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D24FEF81A3C9E8B009E1932 /* WPImageMetaViewController.m */; };
 		74291D0A1940C859004230D4 /* content.html in Resources */ = {isa = PBXBuildFile; fileRef = 74291D091940C859004230D4 /* content.html */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		0CC60190DC0B933B43A45745 /* Pods-EditorDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EditorDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EditorDemoTests/Pods-EditorDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		21FE0BD01EC2BF7A001DE002 /* WordPress-iOS-Editor.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "WordPress-iOS-Editor.podspec"; sourceTree = "<group>"; };
 		59F15AD019E45BB000CD8E33 /* WPEditorDemoLoggingConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPEditorDemoLoggingConfiguration.h; sourceTree = "<group>"; };
 		59F15AD119E45BB000CD8E33 /* WPEditorDemoLoggingConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPEditorDemoLoggingConfiguration.m; sourceTree = "<group>"; };
 		5D24FEF71A3C9E8B009E1932 /* WPImageMetaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPImageMetaViewController.h; sourceTree = "<group>"; };
@@ -78,7 +80,7 @@
 		F1364905ABF9E63116BBBD87 /* Pods-EditorDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EditorDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-EditorDemo/Pods-EditorDemo.release.xcconfig"; sourceTree = "<group>"; };
 		FFBC2B331CB85A5B00B0379E /* WPTestLegacyEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPTestLegacyEditorViewController.h; sourceTree = "<group>"; };
 		FFBC2B341CB85A5B00B0379E /* WPTestLegacyEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPTestLegacyEditorViewController.m; sourceTree = "<group>"; };
-		FFE317141C9C4D5C00430319 /* WordPress-iOS-Editor.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "WordPress-iOS-Editor.podspec"; path = "../WordPress-iOS-Editor.podspec"; sourceTree = "<group>"; };
+		FFE317141C9C4D5C00430319 /* iOSEditor.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = iOSEditor.podspec; path = ../iOSEditor.podspec; sourceTree = "<group>"; };
 		FFE317151C9C4D5C00430319 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		FFE317161C9C4D5C00430319 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -211,7 +213,8 @@
 		FFE317131C9C4D4B00430319 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				FFE317141C9C4D5C00430319 /* WordPress-iOS-Editor.podspec */,
+				21FE0BD01EC2BF7A001DE002 /* WordPress-iOS-Editor.podspec */,
+				FFE317141C9C4D5C00430319 /* iOSEditor.podspec */,
 				FFE317151C9C4D5C00430319 /* README.md */,
 				FFE317161C9C4D5C00430319 /* LICENSE */,
 			);
@@ -309,6 +312,7 @@
 				74291D0A1940C859004230D4 /* content.html in Resources */,
 				748D2AA4193E516000D5ACC8 /* Images.xcassets in Resources */,
 				74991B601BF10E7500AFA57B /* LaunchScreen.storyboard in Resources */,
+				21FE0BD11EC2BF7A001DE002 /* WordPress-iOS-Editor.podspec in Resources */,
 				748D2A9C193E516000D5ACC8 /* Main_iPhone.storyboard in Resources */,
 				748D2A93193E516000D5ACC8 /* InfoPlist.strings in Resources */,
 			);

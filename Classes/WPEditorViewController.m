@@ -246,9 +246,7 @@
 
 - (void)clearToolbar
 {
-    if (!self.editorView.isInVisualMode) {
-        [self.toolbarView clearSelectedToolbarItems];
-    }
+    [self.toolbarView clearSelectedToolbarItems];
 }
 
 - (UIColor *)placeholderColor {
@@ -274,7 +272,7 @@
         self.editorView.autoresizingMask = mask;
         self.editorView.backgroundColor = [UIColor whiteColor];
         self.editorView.sourceView.inputAccessoryView = self.toolbarView;
-        self.editorView.sourceViewTitleField.inputAccessoryView = self.toolbarView;
+//        self.editorView.sourceViewTitleField.inputAccessoryView = self.toolbarView;
         
         // Default placeholder text
         self.titlePlaceholderText = NSLocalizedString(@"Post title",  @"Placeholder for the post title.");
@@ -294,7 +292,6 @@
 - (void)setTitleText:(NSString*)titleText
 {
     [self.editorView.titleField setText:titleText];
-    [self.editorView.sourceViewTitleField setText:titleText];
 }
 
 - (void)setTitlePlaceholderText:(NSString*)titlePlaceholderText
@@ -303,8 +300,6 @@
     if (![titlePlaceholderText isEqualToString:_titlePlaceholderText]) {
         _titlePlaceholderText = titlePlaceholderText;
         [self.editorView.titleField setPlaceholderText:_titlePlaceholderText];
-        self.editorView.sourceViewTitleField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:_titlePlaceholderText
-                                                                                                     attributes:@{NSForegroundColorAttributeName: self.placeholderColor}];
     }
 }
 
@@ -331,29 +326,8 @@
 
 - (void)didTouchMediaOptions
 {
-    if (self.editorView.isInVisualMode) {
-        if ([self.delegate respondsToSelector: @selector(editorDidPressMedia:)]) {
-            [self.delegate editorDidPressMedia:self];
-        }
-    } else {
-        // Do not allow users to insert images in HTML mode for now
-        __weak __typeof(self)weakSelf = self;
-        NSString *title = NSLocalizedString(@"Unable to insert image",
-                                            @"Title of dialog notifing user they cannot insert an image in the editor's HTML mode.");
-        NSString *message = NSLocalizedString(@"You cannot insert images while editing HTML directly. Please switch back to visual mode.",
-                                              @"Body of dialog notifing user they cannot insert an image in the editor's HTML mode.");
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
-                                                                                 message:message
-                                                                          preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"Label text to dismiss an alert view.") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-            [weakSelf clearToolbar];
-        }];
-        
-        [alertController addAction:defaultAction];
-        [self presentViewController:alertController
-                           animated:YES
-                         completion:nil];
+    if ([self.delegate respondsToSelector: @selector(editorDidPressMedia:)]) {
+        [self.delegate editorDidPressMedia:self];
     }
     [WPAnalytics track:WPAnalyticsStatEditorTappedImage];
 }
@@ -503,21 +477,6 @@
 
 - (void)showHTMLSource:(UIBarButtonItem *)barButtonItem
 {
-    if ([self.editorView isInVisualMode]) {
-        if ([self askOurDelegateShouldDisplaySourceView]) {
-            [self.editorView showHTMLSource];
-            [self.toolbarView toolBarItemWithTag:kWPEditorViewControllerElementShowSourceBarButton
-                                     setSelected:YES];
-        } else {
-            // Deselect the HTML button so it is in the proper state
-            [self.toolbarView toolBarItemWithTag:kWPEditorViewControllerElementShowSourceBarButton
-                                     setSelected:NO];
-        }
-    } else {
-		[self.editorView showVisualEditor];
-        [self.toolbarView toolBarItemWithTag:kWPEditorViewControllerElementShowSourceBarButton
-                                 setSelected:NO];
-    }
     
     [WPAnalytics track:WPAnalyticsStatEditorTappedHTML];
 }
@@ -846,7 +805,7 @@
 /**
  *	@brief		Returns an URL from the general pasteboard.
  *
- *	@param		The URL or nil if no valid URL is found.
+ *	the URL or nil if no valid URL is found.
  */
 - (NSURL*)urlFromPasteboard
 {
@@ -951,8 +910,7 @@
         [field setMultiline:NO];
         [field setPlaceholderColor:self.placeholderColor];
         [field setPlaceholderText:self.titlePlaceholderText];
-        self.editorView.sourceViewTitleField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.titlePlaceholderText
-                                                                                                     attributes:@{NSForegroundColorAttributeName: self.placeholderColor}];
+        
     } else if (field == self.editorView.contentField) {
         field.inputAccessoryView = self.toolbarView;
         
@@ -984,13 +942,10 @@
 
 - (void)editorView:(WPEditorView*)editorView sourceFieldFocused:(UIView*)view
 {
-    if (view == self.editorView.sourceViewTitleField) {
-        self.editingTitle = YES;
-        [self.toolbarView enableToolbarItems:NO shouldShowSourceButton:YES];
-    } else {
-        self.editingTitle = NO;
-        [self.toolbarView enableToolbarItems:YES shouldShowSourceButton:YES];
-    }
+    
+    self.editingTitle = NO;
+    [self.toolbarView enableToolbarItems:YES shouldShowSourceButton:YES];
+    
 }
 
 - (BOOL)editorView:(WPEditorView*)editorView
@@ -1112,21 +1067,12 @@ didFailLoadWithError:(NSError *)error
 {
     // This hack forces the input accessory view to refresh itself and resize properly.
     if (self.isFirstSetupComplete) {
-        if ([self.editorView isInVisualMode]) {
-            WPEditorField *field = [self.editorView focusedField];
-            [self.editorView saveSelection];
-            [field blur];
-            [field focus];
-            [self.editorView restoreSelection];
-        } else {
-            if ([[self.editorView sourceViewTitleField] isFirstResponder]) {
-                [[self.editorView sourceViewTitleField] resignFirstResponder];
-                [[self.editorView sourceViewTitleField] becomeFirstResponder];
-            } else {
-                [[self.editorView sourceView] resignFirstResponder];
-                [[self.editorView sourceView] becomeFirstResponder];
-            }
-        }
+       
+        WPEditorField *field = [self.editorView focusedField];
+        [self.editorView saveSelection];
+        [field blur];
+        [field focus];
+        [self.editorView restoreSelection];
     }
 }
 

@@ -43,7 +43,6 @@
     [WPFontManager loadNotoFontFamily];
 
     self.placeholderColor = [WPStyleGuide grey];
-    self.editorView.sourceViewTitleField.font = [WPFontManager notoBoldFontOfSize:24.0];
     self.editorView.sourceContentDividerView.backgroundColor = [WPStyleGuide greyLighten30];
     [self.toolbarView setBorderColor:[WPStyleGuide greyLighten10]];
     [self.toolbarView setItemTintColor: [WPStyleGuide greyLighten10]];
