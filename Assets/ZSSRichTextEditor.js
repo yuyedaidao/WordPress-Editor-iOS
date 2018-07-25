@@ -2657,31 +2657,31 @@ ZSSField.prototype.handleTapEvent = function(e) {
 
             // Is the tapped image the image we're editing?
             if (targetNode == ZSSEditor.currentEditingImage) {
-                ZSSEditor.removeImageSelectionFormatting(targetNode);
+                // ZSSEditor.removeImageSelectionFormatting(targetNode);
                 this.sendImageTappedCallback(targetNode);
                 return;
             }
 
             // If there is a selected image, deselect it. A different image was tapped.
-            if (ZSSEditor.currentEditingImage) {
-                ZSSEditor.removeImageSelectionFormatting(ZSSEditor.currentEditingImage);
-            }
+            // if (ZSSEditor.currentEditingImage) {
+            //     ZSSEditor.removeImageSelectionFormatting(ZSSEditor.currentEditingImage);
+            // }
 
             // Format and flag the image as selected.
             ZSSEditor.currentEditingImage = targetNode;
-            ZSSEditor.applyImageSelectionFormatting(targetNode);
+            // ZSSEditor.applyImageSelectionFormatting(targetNode);
 
             return;
         }
 
-        if (targetNode.className.indexOf('edit-overlay') != -1 || targetNode.className.indexOf('edit-content') != -1) {
-            ZSSEditor.removeImageSelectionFormatting(ZSSEditor.currentEditingImage);
-            this.sendImageTappedCallback(ZSSEditor.currentEditingImage);
-            return;
-        }
+        // if (targetNode.className.indexOf('edit-overlay') != -1 || targetNode.className.indexOf('edit-content') != -1) {
+        //     ZSSEditor.removeImageSelectionFormatting(ZSSEditor.currentEditingImage);
+        //     this.sendImageTappedCallback(ZSSEditor.currentEditingImage);
+        //     return;
+        // }
 
         if (ZSSEditor.currentEditingImage) {
-            ZSSEditor.removeImageSelectionFormatting(ZSSEditor.currentEditingImage);
+            // ZSSEditor.removeImageSelectionFormatting(ZSSEditor.currentEditingImage);
             ZSSEditor.currentEditingImage = null;
         }
 
