@@ -138,6 +138,7 @@ static NSString* const WPEditorViewWebViewContentSizeKey = @"contentSize";
     _webView.keyboardDisplayRequiresUserAction = NO;
     _webView.scrollView.bounces = YES;
     _webView.allowsInlineMediaPlayback = YES;
+    _webView.mediaPlaybackRequiresUserAction = NO;
     [self startObservingWebViewContentSizeChanges];
     
 	[self addSubview:_webView];
